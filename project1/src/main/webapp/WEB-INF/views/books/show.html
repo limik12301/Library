@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show book</title>
+</head>
+<body>
+
+<div style="display: inline;" th:text="${book.getTitle()}">NAME</div>
+<div style="display: inline;" th:text="${book.getAuthor()}">Author</div>
+<div style="display: inline;" th:text="${book.getAge()}">AGE</div>
+
+<br/>
+<hr/>
+<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getBook_id()})}">
+    <input type="submit" value="Edit">
+</form>
+
+<form th:method="DELETE" th:action="@{/books/{id}/delete(id=${book.getBook_id()})}">
+    <input type="submit" value="Delete">
+</form>
+
+<form th:if="${isEmpty}" th:method="PATCH" th:action="@{/books/{book_id}/assign(book_id=${book.getBook_id()})}">
+    <p>Book is Free</p>
+    <br/>
+    <label for="select">Select person:</label>
+    <select id="select" th:object="${person}" th:field="*{person_id}">
+        <option th:each="person : ${people}" th:value="${person.getPerson_id()}" th:text="${person.getName()}">
+        </option>
+    </select>
+    <input type="submit" value="select">
+</form>
+<form th:unless="${isEmpty}" th:method="PATCH" th:action="@{/books/{book_id}/release(book_id=${book.getBook_id()})}">
+    <p th:text="${person.getName()}">PERSON</p>
+    <input type="submit" value="Release book">
+</form>
+
+</body>
+</html>
