@@ -1,8 +1,9 @@
 package org.example.Controllers;
 
-import org.example.DAO.BookDAO;
-import org.example.DAO.PersonDAO;
+
 import org.example.models.Person;
+import org.example.services.BookService;
+import org.example.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,18 +15,18 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/people")
 public class PersonController {
-    private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
+    private final PersonService personService;
+    private final BookService bookService;
 
     @Autowired
-    public PersonController(PersonDAO personDAO, BookDAO bookDAO) {
-        this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
+    public PersonController(PersonService personService, BookService bookService) {
+        this.personService = personService;
+        this.bookService = bookService;
     }
 
     @GetMapping()
     public String getPeople(Model model) {
-        model.addAttribute("people", personDAO.getPeople());
+        model.addAttribute("people", personService.findAll());
         return "people/index";
     }
 
@@ -42,22 +43,22 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
-        personDAO.createPerson(person);
+        personService.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{Person_id}")
     public String showPerson(Model model, @PathVariable("Person_id") int Person_id) {
-        model.addAttribute("person", personDAO.showPerson(Person_id));
-        model.addAttribute("books", bookDAO.getListBooks(Person_id));
-        boolean IsNotNull = !bookDAO.getListBooks(Person_id).isEmpty();
+        model.addAttribute("person", personService.findPersonById(Person_id));
+        model.addAttribute("books", bookService.findByOwner(Person_id));
+        boolean IsNotNull = !bookService.findByOwner(Person_id).isEmpty();
         model.addAttribute("IsNotNull", IsNotNull);
         return "people/show";
     }
 
     @GetMapping("/{Person_id}/edit")
     public String editPerson(Model model, @PathVariable("Person_id") int Person_id) {
-        model.addAttribute("person", personDAO.showPerson(Person_id));
+        model.addAttribute("person", personService.findPersonById(Person_id));
         return "people/edit";
     }
 
@@ -68,13 +69,13 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "/people/edit";
         }
-        personDAO.updatePerson(Person_id, person);
+        personService.update(Person_id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{Person_id}/delete")
     public String deletePerson(@PathVariable("Person_id") int Person_id) {
-        personDAO.deletePerson(Person_id);
+        personService.deleteById(Person_id);
         return "redirect:/people";
     }
 

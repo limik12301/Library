@@ -10,14 +10,14 @@
 <div style="display: inline;" th:text="${person.getAge()}">AGE</div>
 
 
-<div th:if="${IsNotNull}" th:each="book: ${books}">
+<form th:if="${IsNotNull}" th:each="book: ${books}">
     <br/>
     <hr/>
-    <p th:text="${book.getTitle()}">TITLE</p>
-</div>
-<div th:unless="${IsNotNull}">
+        <p th:style="${book.checkOverdue()}" th:text="${book.getTitle()}">TITLE</p>
+</form>
+<form th:unless="${IsNotNull}">
     <p>Null books</p>
-</div>
+</form>
 
 <br/>
 <hr/>

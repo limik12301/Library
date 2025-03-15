@@ -1,18 +1,32 @@
 package org.example.models;
 
-import org.springframework.stereotype.Component;
-
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
+@Entity
+@Table(name = "person")
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "person_id")
     private int Person_id;
+
+    @Column(name = "name")
     @NotEmpty(message = "name should not be empty")
     @Size(min=2,max=30,message = "name should be 2 between 30")
     private String name;
+
+    @Column(name = "age")
     @Min(value = 0, message = "age should be more than zero")
     private int age;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
+
+
 
     public String getName() {
         return name;

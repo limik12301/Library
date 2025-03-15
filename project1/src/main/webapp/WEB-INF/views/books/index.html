@@ -12,6 +12,28 @@
     <a th:href="@{books/{id}(id=${book.getBook_id()})}" th:text="${book.getTitle()}">user</a>
 </div>
 <br/>
+<form th:method="GET" th:action="@{books}">
+    <label for="page">select page:</label>
+    <input type="text" th:name="@{page}" id="page"/>
+    <br/>
+    <label for="size">select size page:</label>
+    <input type="text" th:name="@{size}" id="size"/>
+    <br/>
+    <input type="submit" value="select"/>
+    <input type="submit" value="true" th:name="@{sorted}">
+</form>
+
+<br/>
+<hr/>
+<form th:method="GET" th:action="@{books}">
+    <input type="hidden" th:value="true" th:name="@{sorted}">
+    <input type="submit" value="Sorted by age">
+</form>
+<br/>
+<form th:method="GET" th:action="@{books/search}">
+    <input type="submit" value="Search books">
+</form>
+<br/>
 <hr/>
 <form th:method="GET" th:action="@{books/new}">
     <input type="submit"  value="Create new Book"/>

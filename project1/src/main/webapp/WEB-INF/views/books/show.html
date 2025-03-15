@@ -31,7 +31,7 @@
     <input type="submit" value="select">
 </form>
 <form th:unless="${isEmpty}" th:method="PATCH" th:action="@{/books/{book_id}/release(book_id=${book.getBook_id()})}">
-    <p th:text="${person.getName()}">PERSON</p>
+    <p th:text="${people.get(0).getName()}">PERSON</p>
     <input type="submit" value="Release book">
 </form>
 
